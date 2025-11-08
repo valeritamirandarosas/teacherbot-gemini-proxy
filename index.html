@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TeacherBot · Proxy de Gemini</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <!-- NAV -->
+  <header class="nav">
+    <div class="container nav__inner">
+      <a class="brand" href="/">
+        <span class="brand__logo" aria-hidden="true">
+          <!-- mini logo "T" -->
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none">
+            <rect x="2" y="2" width="20" height="20" rx="6" stroke="url(#g1)" stroke-width="2"/>
+            <path d="M7 8h10M12 8v8" stroke="url(#g2)" stroke-width="2" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="24" y2="24">
+                <stop stop-color="#00E5FF"/><stop offset="1" stop-color="#7C3AED"/>
+              </linearGradient>
+              <linearGradient id="g2" x1="6" y1="6" x2="18" y2="18">
+                <stop stop-color="#00E5FF"/><stop offset="1" stop-color="#7C3AED"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+        <span class="brand__text">TeacherBot</span>
+      </a>
+      <nav class="nav__actions">
+        <a class="btn btn--ghost" href="#docs">Documentación</a>
+        <a class="btn btn--primary" href="/api/health">Probar /api/health</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Proyecto académico · 4º de Secundaria</p>
+      <h1 class="hero__title">
+        <span class="accent">Estudiar</span> es como maratonear tu serie favorita.
+      </h1>
+      <p class="hero__subtitle">
+        Este es el <strong>Proxy de Gemini</strong> de la app Innovatec TeacherBot. Protege la
+        clave de la API y permite a la aplicación del colegio hablar con Gemini de forma segura.
+      </p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="#endpoints">Empezar</a>
+        <a class="btn btn--ghost" href="#feedback">Enviarnos Feedback</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIÉNES SOMOS -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section__title">Quiénes Somos</h2>
+      <p class="section__subtitle">
+        Un equipo que fusiona tecnología y educación para experiencias de aprendizaje memorables.
+      </p>
+      <div class="media">
+        <div class="media__thumb" aria-label="Video institucional (placeholder)">
+          <button class="play" aria-label="Reproducir">
+            ▶
+          </button>
+        </div>
+      </div>
+
+      <div class="grid team">
+        <article class="card card--person">
+          <img class="avatar" src="https://picsum.photos/seed/a/128" alt="Ana García" />
+          <h3 class="card__title">Ana García</h3>
+          <p class="card__meta">Líder de Pedagogía</p>
+          <p class="card__body">“Transformamos la educación con cada línea de código”.</p>
+        </article>
+        <article class="card card--person">
+          <img class="avatar" src="https://picsum.photos/seed/b/128" alt="Carlos Rivas" />
+          <h3 class="card__title">Carlos Rivas</h3>
+          <p class="card__meta">Ingeniero en IA</p>
+          <p class="card__body">“La IA es la nueva tiza del siglo XXI”.</p>
+        </article>
+        <article class="card card--person">
+          <img class="avatar" src="https://picsum.photos/seed/c/128" alt="Sofía Mendoza" />
+          <h3 class="card__title">Sofía Mendoza</h3>
+          <p class="card__meta">Diseñadora de Experiencia</p>
+          <p class="card__body">“Creamos caminos de aprendizaje que inspiran curiosidad”.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENDPOINTS / DOCS -->
+  <section id="endpoints" class="section alt">
+    <div class="container">
+      <h2 class="section__title" id="docs">Endpoints del Proxy</h2>
+      <div class="grid docs">
+        <article class="card">
+          <h3 class="card__title">GET /api/health</h3>
+          <p class="card__body">Estado del servicio.</p>
+          <pre><code>curl -s https://TU-DOMINIO.vercel.app/api/health</code></pre>
+        </article>
+        <article class="card">
+          <h3 class="card__title">POST /api/gemini</h3>
+          <p class="card__body">Proxy a Google Gemini (v1beta).</p>
+<pre><code>curl -X POST https://TU-DOMINIO.vercel.app/api/gemini \
+ -H "Content-Type: application/json" \
+ -d '{"prompt":"Hola, Gemini"}'</code></pre>
+        </article>
+        <article class="card">
+          <h3 class="card__title">Privacidad y límites</h3>
+          <p class="card__body">
+            Orígenes permitidos via <code>ALLOWED_ORIGINS</code>. Datos usados solo con fines educativos.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEEDBACK -->
+  <section id="feedback" class="section">
+    <div class="container">
+      <h2 class="section__title">Envíanos tu Feedback</h2>
+      <p class="section__subtitle">Tu opinión nos ayuda a mejorar.</p>
+      <form class="form" onsubmit="event.preventDefault(); alert('¡Gracias por tu mensaje!');">
+        <label class="form__label">Email (Opcional)
+          <input class="input" type="email" placeholder="tucorreo@colegio.edu">
+        </label>
+        <label class="form__label">Categoría
+          <select class="input">
+            <option>General</option>
+            <option>Idea</option>
+            <option>Bug</option>
+            <option>Contenido</option>
+          </select>
+        </label>
+        <label class="form__label">Mensaje
+          <textarea class="input" rows="5" placeholder="Cuéntanos qué piensas…"></textarea>
+        </label>
+        <div class="form__actions">
+          <button class="btn btn--primary" type="submit">Enviar Mensaje</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="small">INNOVATEC · COSABE — Proyecto académico</p>
+      <div class="social">
+        <a aria-label="Facebook" href="#" class="social__btn">f</a>
+        <a aria-label="Instagram" href="#" class="social__btn">◎</a>
+        <a aria-label="YouTube" href="#" class="social__btn">▶</a>
+      </div>
+    </div>
+    <p class="tiny">© 2025 Innovatec. Todos los derechos reservados.</p>
+  </footer>
+</body>
+</html>
