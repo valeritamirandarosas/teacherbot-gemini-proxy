@@ -1,4 +1,7 @@
 {
   "name": "teacherbot-gemini-proxy",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0"
+  }
 }
