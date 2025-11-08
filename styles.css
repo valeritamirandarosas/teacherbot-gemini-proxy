@@ -107,3 +107,6 @@ pre{background:#0b1222;border:1px solid var(--line);padding:14px;border-radius:1
   .hero__title{font-size:32px}
   .footer__inner{flex-direction:column}
 }
+
+.list{padding-left:18px;margin:6px 0 0}
+.list li{margin:6px 0;color:#cbd5e1}
