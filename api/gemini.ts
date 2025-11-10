@@ -4,16 +4,11 @@ import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/ge
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 // --- CONFIGURACIÓN DE CORS ---
-// Middleware simple para añadir las cabeceras CORS a la respuesta
 function allowCors(fn: (req: VercelRequest, res: VercelResponse) => Promise<void>) {
   return async (req: VercelRequest, res: VercelResponse) => {
-    // Permite peticiones desde CUALQUIER origen. Para mayor seguridad, puedes cambiar '*'
-    // por el dominio de tu app de Firebase: 'https://innovatec-chatbot-XXXX.web.app'
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-    // Maneja las peticiones pre-flight de CORS (método OPTIONS)
     if (req.method === 'OPTIONS') {
       res.status(200).end();
       return;
@@ -21,12 +16,12 @@ function allowCors(fn: (req: VercelRequest, res: VercelResponse) => Promise<void
     return await fn(req, res);
   };
 }
-// --- FIN DE LA CONFIGURACIÓN DE CORS ---
 
-// Configuración de la API de Gemini
+// --- CONFIGURACIÓN DE LA API DE GEMINI ---
 const API_KEY = process.env.GEMINI_API_KEY!;
 const genAI = new GoogleGenerativeAI(API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+// *** ESTA ES LA LÍNEA CORREGIDA ***
+const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
 const generationConfig = {
   temperature: 0.9,
@@ -54,38 +49,31 @@ async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     let prompt;
-    let schema;
-
+    
+    // NOTA: Tu lógica original para construir los prompts era correcta. La restauramos.
     if (endpoint === 'chat') {
         const { character, mode, subject, messages } = payload;
         const history = messages.map((m: { role: string, content: string }) => ({
-            role: m.role,
+            role: m.role === 'assistant' ? 'model' : 'user', // Gemini usa 'model' para el rol del asistente
             parts: [{ text: m.content }]
         }));
 
-        // El último mensaje es el que se va a procesar
         const userMessage = history.pop().parts[0].text;
-
+        
         prompt = `Actúa como ${character.name} (${character.prompt}). El modo es "${mode.label}". El tema es "${subject}". El estudiante dice: "${userMessage}". Responde de forma concisa y directa.`;
-        schema = { type: "string" }; // Esperamos una respuesta de texto simple
+    
     } else if (endpoint === 'bundle') {
         const { subject, grade, character } = payload;
-        // El prompt ya está bien definido en tu código original para el bundle
         prompt = `Crea un paquete de estudio JSON para ${subject}, grado ${grade}, con el tutor ${character.name}.`;
-        schema = payload.schema; // Reutilizamos el esquema Zod que se envía en el payload
+    
     } else {
       return res.status(400).json({ error: 'Endpoint no válido. Usa "chat" o "bundle".' });
     }
     
-    const result = await model.generateContent({
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig,
-      safetySettings,
-    });
+    const result = await model.generateContent(prompt);
     
     const responseText = result.response.text();
     
-    // Para el bundle, intentamos parsear el JSON
     if (endpoint === 'bundle') {
         try {
             const jsonResponse = JSON.parse(responseText.replace(/```json/g, '').replace(/```/g, ''));
@@ -96,7 +84,6 @@ async function handler(req: VercelRequest, res: VercelResponse) {
         }
     }
 
-    // Para el chat, devolvemos el texto plano en un objeto
     return res.status(200).json({ reply: responseText });
 
   } catch (error: any) {
@@ -108,5 +95,4 @@ async function handler(req: VercelRequest, res: VercelResponse) {
   }
 }
 
-// Exportamos el handler envuelto en el middleware de CORS
 export default allowCors(handler);
